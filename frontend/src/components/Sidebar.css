@@ -1,0 +1,26 @@
+/* Sidebar.css */
+.sidebar-logo {
+  margin: 1rem 0;
+}
+
+.sidebar-logo h1 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  width: 100%;
+}
+
+.sidebar-menu li {
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.sidebar-menu li:hover {
+  background-color: #3d5a80;
+}

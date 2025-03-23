@@ -1,0 +1,53 @@
+/* App.css */
+
+/* Reset or base styles (optional) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+/* Sidebar is a fixed width on the left */
+.sidebar {
+  width: 250px; /* Adjust to your liking */
+  background-color: #293241; /* Example dark background */
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The main content area takes remaining space */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa; /* Light background for contrast */
+}
+
+/* Topbar is pinned at the top of main-content */
+.topbar {
+  width: 100%;
+  background-color: #3d5a80;
+  color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Where you place the page’s main content (like the Connections table) */
+.content-wrapper {
+  padding: 1.5rem;
+}
+
+/* If you want to style the page’s heading differently */
+.content-wrapper h2 {
+  margin-bottom: 1rem;
+}

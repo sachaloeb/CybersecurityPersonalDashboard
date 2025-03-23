@@ -1,0 +1,32 @@
+/* ConnectionsTable.css */
+.connections-table-wrapper {
+  overflow-x: auto; /* If table is wide, enable horizontal scroll */
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.connections-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.connections-table thead {
+  background-color: #e0e0e0;
+}
+
+.connections-table th,
+.connections-table td {
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.connections-table tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.connections-table tbody tr:hover {
+  background-color: #ddd;
+}

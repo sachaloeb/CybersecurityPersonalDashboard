@@ -1,0 +1,35 @@
+/* Topbar.css */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.topbar h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* space between icons/profile */
+}
+
+.icon-bell,
+.avatar {
+  cursor: pointer;
+}
+
+.avatar {
+  background-color: #ee6c4d;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+}
