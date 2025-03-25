@@ -2,9 +2,19 @@ from flask import Flask, jsonify
 import psutil
 import socket
 from flask_cors import CORS
+from security_overview.routes import security_bp
 
 app = Flask(__name__)
+app.register_blueprint(security_bp)
 CORS(app)
+
+@app.route('/api/connections', methods=['GET'])
+def get_connections():
+    return jsonify(get_connections_info())
+
+@app.route('/', methods=['GET'])
+def home():
+    return "Welcome to the Cybersecurity Personal Dashboard API"
 
 def get_connections_info():
     connections_info = []
@@ -32,13 +42,5 @@ def get_connections_info():
         connections_info.append(connection_data)
     return connections_info
 
-@app.route('/api/connections', methods=['GET'])
-def get_connections():
-    return jsonify(get_connections_info())
-
-@app.route('/', methods=['GET'])
-def home():
-    return "Welcome to the Cybersecurity Personal Dashboard API"
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(debug=True,host='0.0.0.0',port=5050)

@@ -1,0 +1,59 @@
+/* SecurityOverview.css */
+
+.security-overview-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.security-overview-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  width: 400px;
+  max-width: 90%;
+  padding: 1.5rem;
+}
+
+.security-overview-header {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.security-overview-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.security-overview-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.security-overview-value {
+  color: #333;
+}
+
+/* Example classes to highlight statuses in color */
+.status-enabled {
+  color: #28a745; /* green */
+  font-weight: 600;
+}
+
+.status-disabled {
+  color: #dc3545; /* red */
+  font-weight: 600;
+}
+
+/* Simple loading/error styling */
+.security-overview-message {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+  padding: 2rem;
+}

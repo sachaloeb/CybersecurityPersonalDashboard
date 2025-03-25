@@ -9,7 +9,7 @@ function ConnectionsTable() {
     const fetchConnections = async () => {
       try {
         console.log('Fetching connections...');
-        const response = await axios.get('http://0.0.0.0:5001/api/connections');
+        const response = await axios.get('http://0.0.0.0:5050/api/connections');
         setConnections(response.data);
       } catch (error) {
         console.error('Error fetching connections:', error);
@@ -28,6 +28,7 @@ function ConnectionsTable() {
 
   return (
     <div className="connections-table-wrapper">
+      <h2>Connections Table</h2>
       <table className="connections-table">
         <thead>
           <tr>

@@ -24,3 +24,21 @@
 .sidebar-menu li:hover {
   background-color: #3d5a80;
 }
+
+.sidebar {
+  width: 200px;
+  background-color: #333;
+  color: white;
+  height: 100vh;
+  padding: 20px 0;
+}
+
+.sidebar-menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.sidebar-menu a:hover {
+  text-decoration: underline;
+}
