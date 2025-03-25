@@ -25,7 +25,7 @@ def get_firewall_status():
     try:
         if "linux" in current_os:
             # Check if ufw is installed and enabled
-            result = subprocess.run(["ufw", "status"], capture_output=True, text=True)
+            result = subprocess.run(["sudo","ufw", "status"], capture_output=True, text=True)
             # Typical response might be "Status: active" or "Status: inactive"
             if "active" in result.stdout.lower():
                 return "Enabled"
@@ -35,14 +35,18 @@ def get_firewall_status():
             # macOS firewall states:
             # 0 = Off, 1 = On for specific services, 2 = On for essential services
             result = subprocess.run(
-                ["defaults", "read", "/Library/Preferences/com.apple.alf", "globalstate"],
+                ["/usr/libexec/ApplicationFirewall/socketfilterfw", "--getglobalstate"],
                 capture_output=True, text=True
             )
+            print("Result:",result)
             state = result.stdout.strip()
-            if state == "0":
+            print("State:",state)
+            if "Firewall is enabled" in state:
+                return "Enabled"
+            elif "Firewall is disabled" in state:
                 return "Disabled"
             else:
-                return "Enabled"
+                return "Unknown"
         elif "windows" in current_os:
             # Windows firewall status using netsh
             result = subprocess.run(
