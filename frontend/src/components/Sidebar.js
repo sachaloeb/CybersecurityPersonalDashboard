@@ -12,6 +12,7 @@ function Sidebar() {
       <ul className="sidebar-menu">
         <li><Link to="/security-overview">Security Overview</Link></li>
         <li><Link to="/connections-table">Connections Table</Link></li>
+        <li><Link to="/password-checker">Password Checker</Link></li>
         {/* Add more links as needed */}
       </ul>
     </div>

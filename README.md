@@ -57,7 +57,7 @@ PersonalCybersecurityDashboard/
 │ ├── package.json # Node.js dependencies
 │ ├── src/
 │ │ ├── App.js # Main React component
-│ │ ├── components/ # Shared components (DashboardLayout, etc.)
+│ │ ├── pages/ # Shared pages (DashboardLayout, etc.)
 │ │ ├── pages/ # Feature pages (NetworkMonitor, PasswordChecker, etc.)
 │ │ └── tests/ # TDD: Frontend tests
 │ └── ...
