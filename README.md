@@ -87,9 +87,9 @@ npm install
 1. **Backend**  
    ```bash
    cd backend
-   sudo gunicorn --bind 0.0.0.0:5001 Backend.app:app
+   sudo gunicorn -w 4 -b 0.0.0.0:5050 app:app
    ```
-   By default, the backend should start at http://0.0.0.0:5001.
+   By default, the backend should start at http://0.0.0.0:5050.
 2. **Frontend**
    ```bash
    cd frontend
