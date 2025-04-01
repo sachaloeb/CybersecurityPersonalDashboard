@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "LgopAMVXuLGj59E+VnidoNj5J/3Zlf4qDr3V7A/NthQ=",
+  "Source": "CyberDashboard.API",
+  "BasePath": "_content/CyberDashboard.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

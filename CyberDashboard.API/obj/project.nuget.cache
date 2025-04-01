@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "SX/6Eu57c6w=",
+  "success": true,
+  "projectFilePath": "/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/CyberDashboard.API.csproj",
+  "expectedPackageFiles": [
+    "/Users/sachaloeb/.nuget/packages/microsoft.aspnetcore.openapi/9.0.3/microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "/Users/sachaloeb/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/Users/sachaloeb/.nuget/packages/zxcvbn-core/7.0.92/zxcvbn-core.7.0.92.nupkg.sha512"
+  ],
+  "logs": []
+}

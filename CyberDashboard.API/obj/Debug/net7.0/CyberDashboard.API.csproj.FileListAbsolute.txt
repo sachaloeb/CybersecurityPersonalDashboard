@@ -1,0 +1,8 @@
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.csproj.AssemblyReference.cache
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.AssemblyInfoInputs.cache
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.AssemblyInfo.cs
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.csproj.CoreCompileInputs.cache
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.MvcApplicationPartsAssemblyInfo.cs
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.MvcApplicationPartsAssemblyInfo.cache
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/obj/Debug/net7.0/CyberDashboard.API.sourcelink.json
