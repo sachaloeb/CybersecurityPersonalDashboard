@@ -20,8 +20,9 @@ function PasswordChecker() {
       if (!response.ok) {
         throw new Error('Failed to check password');
       }
-
+      
       const data = await response.json();
+      console.log(data);
       setResult(data);
     } catch (err) {
       setError(err.message);
@@ -78,26 +79,26 @@ function PasswordChecker() {
               <div
                 className="progress-bar-fill"
                 style={{
-                  width: `${getProgressPercentage(result.score)}%`,
-                  backgroundColor: getProgressColor(result.score),
+                  width: `${getProgressPercentage(result.value.score)}%`,
+                  backgroundColor: getProgressColor(result.value.score),
                 }}
               />
             </div>
 
             <p className="hashed">
-              <strong>Hashed Password:</strong> {result.hashed_password}
+              <strong>Hashed Password:</strong> {result.value.hashedPassword}
             </p>
 
             <p>
-              <strong>Strength Score:</strong> {result.score} (0 = Weakest, 4 = Strongest)
+              <strong>Strength Score:</strong> {result.value.score} (0 = Very Weak, 4 = Very Strong)
             </p>
 
             <p>
-              <strong>Strength Label:</strong> {result.strength_label}
+              <strong>Strength Label:</strong> {result.value.strengthLabel}
             </p>
 
             <p>
-              <strong>Feedback:</strong> {result.feedback}
+              <strong>Feedback:</strong> {result.value.feedback}
             </p>
           </div>
         )}
