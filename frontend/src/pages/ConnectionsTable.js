@@ -9,8 +9,9 @@ function ConnectionsTable() {
     const fetchConnections = async () => {
       try {
         console.log('Fetching connections...');
-        const response = await axios.get('http://0.0.0.0:5050/api/connections');
-        setConnections(response.data);
+        const response = await axios.get('https://localhost:7122/api/status');
+        console.log('API response:', response.data);
+        setConnections(response.data.value); // Extract the value property
       } catch (error) {
         console.error('Error fetching connections:', error);
       }
@@ -26,11 +27,17 @@ function ConnectionsTable() {
     return () => clearInterval(intervalId);
   }, []);
 
+  console.log('Connections state:', connections);
+
+  if (!Array.isArray(connections)) {
+    return <div>No connections available</div>;
+  }
+
   return (
-    <div className="connections-table-wrapper">
-      <h2>Connections Table</h2>
-      <table className="connections-table">
-        <thead>
+      <div className="connections-table-wrapper">
+        <h2>Connections Table</h2>
+        <table className="connections-table">
+          <thead>
           <tr>
             <th>Local Address</th>
             <th>Local Port</th>
@@ -39,21 +46,21 @@ function ConnectionsTable() {
             <th>Protocol</th>
             <th>Status</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {connections.map((conn, index) => (
-            <tr key={index}>
-              <td>{conn.local_address}</td>
-              <td>{conn.local_port}</td>
-              <td>{conn.remote_address}</td>
-              <td>{conn.remote_port}</td>
-              <td>{conn.protocol}</td>
-              <td>{conn.status}</td>
-            </tr>
+              <tr key={index}>
+                <td>{conn.local}</td>
+                <td>{conn.localPort}</td>
+                <td>{conn.remote}</td>
+                <td>{conn.remotePort}</td>
+                <td>{conn.protocol}</td>
+                <td>{conn.state}</td>
+              </tr>
           ))}
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
   );
 }
 

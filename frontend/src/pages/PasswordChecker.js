@@ -11,7 +11,7 @@ function PasswordChecker() {
     setResult(null);
 
     try {
-      const response = await fetch('http://localhost:5050/api/check_password', {
+      const response = await fetch('https://localhost:7122/api/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })

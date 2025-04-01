@@ -13,7 +13,10 @@ public static class NetworkService
             connections.Add(new NetworkConnection
             {
                 Local = connection.LocalEndPoint.ToString(),
+                LocalPort = connection.LocalEndPoint.Port,
                 Remote = connection.RemoteEndPoint.ToString(),
+                RemotePort = connection.RemoteEndPoint.Port,
+                Protocol = "TCP",
                 State = connection.State.ToString()
             });
         }
