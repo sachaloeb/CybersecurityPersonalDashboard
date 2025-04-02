@@ -97,9 +97,9 @@ function PasswordChecker() {
               <strong>Strength Label:</strong> {result.value.strengthLabel}
             </p>
 
-            <p>
-              <strong>Feedback:</strong> {result.value.feedback}
-            </p>
+            {/*<p>*/}
+            {/*  <strong>Feedback:</strong> {result.value.feedback}*/}
+            {/*</p>*/}
           </div>
         )}
       </div>

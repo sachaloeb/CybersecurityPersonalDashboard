@@ -60,6 +60,10 @@
               "target": "Package",
               "version": "[9.0.3, )"
             },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
             "xunit": {
               "target": "Package",
               "version": "[2.9.3, )"

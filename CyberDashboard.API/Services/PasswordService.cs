@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Zxcvbn;
 
 public static class PasswordService
@@ -8,6 +9,10 @@ public static class PasswordService
     {
         // Evaluate with Zxcvbn
         var zxcvbnResult = Zxcvbn.Core.EvaluatePassword(password);
+
+        // Print the entire content of zxcvbnResult
+        string zxcvbnResultJson = JsonSerializer.Serialize(zxcvbnResult, new JsonSerializerOptions { WriteIndented = true });
+        Console.WriteLine($"Password Evaluation Result: {zxcvbnResultJson}");
 
         // Hash the password (SHA-256)
         string hashed = HashPasswordSha256(password);
@@ -20,8 +25,8 @@ public static class PasswordService
             HashedPassword = hashed,
             Score = zxcvbnResult.Score,
             StrengthLabel = label,
-            Feedback = zxcvbnResult.Feedback.Suggestions != null 
-                ? string.Join(", ", zxcvbnResult.Feedback.Suggestions) 
+            Feedback = zxcvbnResult.Feedback.Suggestions != null
+                ? string.Join(", ", zxcvbnResult.Feedback.Suggestions)
                 : "No feedback"
         };
     }

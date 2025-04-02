@@ -71,7 +71,7 @@ const SecurityOverview = () => {
 
           <div className="security-overview-item">
             <span className="security-overview-label">System Uptime (Hours):</span>
-            <span className="security-overview-value">{overview.value.uptimeHours}</span>
+            <span className="security-overview-value">{overview.value.uptimeHours.toFixed(2)}</span>
           </div>
 
           <div className="security-overview-item">

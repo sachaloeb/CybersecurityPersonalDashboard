@@ -12,6 +12,7 @@
           "Microsoft.NET.Test.Sdk": "17.13.0",
           "Newtonsoft.Json": "13.0.1",
           "System.Management": "9.0.3",
+          "System.Text.Json": "9.0.3",
           "xunit": "2.9.3",
           "xunit.runner.visualstudio": "3.0.2",
           "zxcvbn-core": "7.0.92"
@@ -335,6 +336,7 @@
         }
       },
       "System.Reflection.Metadata/1.6.0": {},
+      "System.Text.Json/9.0.3": {},
       "xunit/2.9.3": {
         "dependencies": {
           "xunit.analyzers": "1.18.0",
@@ -473,6 +475,13 @@
       "sha512": "sha512-COC1aiAJjCoA5GBF+QKL2uLqEBew4JsCkQmoHKbN3TlOZKa2fKLz5CpiRQKDz0RsAOEGsVKqOD5bomsXq/4STQ==",
       "path": "system.reflection.metadata/1.6.0",
       "hashPath": "system.reflection.metadata.1.6.0.nupkg.sha512"
+    },
+    "System.Text.Json/9.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-r2JRkLjsYrq5Dpo7+y3Wa73OfirZPdVhxiTJWwZ+oJM7FOAe0LkM3GlH+pgkNRdd1G1kwUbmRCdmh4uoaWwu1g==",
+      "path": "system.text.json/9.0.3",
+      "hashPath": "system.text.json.9.0.3.nupkg.sha512"
     },
     "xunit/2.9.3": {
       "type": "package",

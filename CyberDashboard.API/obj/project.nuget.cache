@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "X2x4WONWW6M=",
+  "dgSpecHash": "PEATJeMUyAk=",
   "success": true,
   "projectFilePath": "/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/CyberDashboard.API.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,7 @@
     "/Users/sachaloeb/.nuget/packages/system.codedom/9.0.3/system.codedom.9.0.3.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/system.management/9.0.3/system.management.9.0.3.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/system.reflection.metadata/1.6.0/system.reflection.metadata.1.6.0.nupkg.sha512",
+    "/Users/sachaloeb/.nuget/packages/system.text.json/9.0.3/system.text.json.9.0.3.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/xunit/2.9.3/xunit.2.9.3.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/xunit.abstractions/2.0.3/xunit.abstractions.2.0.3.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/xunit.analyzers/1.18.0/xunit.analyzers.1.18.0.nupkg.sha512",
