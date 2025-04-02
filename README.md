@@ -36,7 +36,7 @@
 ## Tech Stack
 
 - **Frontend**: [React.js](https://reactjs.org/)  
-- **Backend**: Python ([Flask](https://flask.palletsprojects.com/))
+- **Backend**: C# ([ASP.NET Core Web API](https://dotnet.microsoft.com/en-us/apps/aspnet))
 - **Database**: [PostgreSQL](https://www.postgresql.org/)  
 - **Deployment**: Docker (with optional deployment on Heroku, AWS, or personal servers)
 
@@ -48,17 +48,20 @@
 
 ```bash
 PersonalCybersecurityDashboard/
-├── backend/
-│ ├── app.py # Main Flask/Django entry point
-│ ├── requirements.txt # Python dependencies
-│ ├── tests/ # TDD: Backend tests
-│ └── ... # Additional modules (e.g., vulnerability_scanner, log_parser)
+│ ├── CyberSecDashboard.API/ # ASP.NET Core project folder
+│ │ ├── Controllers/ # API Controllers (Network, Password, ThreatIntel, etc.)
+│ │ ├── Services/ # Core logic per feature
+│ │ ├── Models/ # DTOs and entity classes
+│ │ ├── CyberSecDashboard.API.csproj
+│ │ ├── Program.cs # API entry point
+│ │ └── CyberSecDashboardTests/ # xUnit or NUnit tests
 ├── frontend/
 │ ├── package.json # Node.js dependencies
 │ ├── src/
 │ │ ├── App.js # Main React component
-│ │ ├── pages/ # Shared pages (DashboardLayout, etc.)
 │ │ ├── pages/ # Feature pages (NetworkMonitor, PasswordChecker, etc.)
+│ │ ├── components/
+│ │ ├── utils/
 │ │ └── tests/ # TDD: Frontend tests
 │ └── ...
 ├── README.md # Project documentation
@@ -70,9 +73,14 @@ PersonalCybersecurityDashboard/
    git clone https://github.com/sachaloeb/CybersecurityPersonalDashboard.git
    ```
 2. Backend Setup
-   - Install Python dependencies.
+   - Install .NET SDK (if not installed).
      ```bash
-     pip install -r requirements.txt
+     brew install --cask dotnet
+     ```
+   - Restore dependencies:
+     ```bash
+     cd CyberSecDashboard.API
+     dotnet restore
      ```
 3. Frontend Setup
 ```bash
@@ -86,10 +94,10 @@ npm install
 
 1. **Backend**  
    ```bash
-   cd backend
-   sudo gunicorn -w 4 -b 0.0.0.0:5050 app:app
+   cd CyberDashboard.API
+   dotnet run --launch-profile "CyberDashboard.API"
    ```
-   By default, the backend should start at http://0.0.0.0:5050.
+   By default, the backend should start at https://localhost:7122.
 2. **Frontend**
    ```bash
    cd frontend
@@ -101,8 +109,8 @@ Open your browser and navigate to http://localhost:3000. You should see the logi
 ### Testing (TDD)
 1. **Backend Tests:**
    ```bash
-   cd backend
-   pytest
+   cd CyberDashboard.API
+   dotnet test
    ```
 2. **Frontend Tests:**
    ```bash
