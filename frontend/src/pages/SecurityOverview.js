@@ -23,25 +23,78 @@ const SecurityOverview = () => {
     fetchSecurityOverview();
   }, []);
 
+  const getStatusClass = (status) => {
+    if (typeof status !== 'string') return '';
+    const normalized = status.toLowerCase();
+    if (normalized.includes('enabled') || normalized.includes('active') || normalized.includes('on')) {
+      return 'status-enabled';
+    } else if (normalized.includes('disabled') || normalized.includes('inactive') || normalized.includes('off')) {
+      return 'status-disabled';
+    }
+    return '';
+  };
+  
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+        <div className="security-overview-container">
+          <div className="security-overview-card">
+            <div className="security-overview-message">Loading...</div>
+          </div>
+        </div>
+    );
   }
 
   if (error) {
-    return <div>Error fetching security overview: {error.message}</div>;
+    return (
+        <div className="security-overview-container">
+          <div className="security-overview-card">
+            <div className="security-overview-message">Error: {error}</div>
+          </div>
+        </div>
+    );
   }
 
   if (!overview || !overview.value) {
-    return <div>No data available</div>;
+    return (
+        <div className="security-overview-container">
+          <div className="security-overview-card">
+            <div className="security-overview-message">No data available</div>
+          </div>
+        </div>
+    );
   }
 
   return (
-      <div>
-        <h1>Security Overview</h1>
-        <p>Uptime Hours: {overview.value.uptimeHours}</p>
-        <p>Firewall Status: {overview.value.firewallStatus}</p>
-        <p>Antivirus Status: {overview.value.antivirusStatus}</p>
-        <p>Logged In Users: {overview.value.loggedInUsers ? overview.value.loggedInUsers.join(', ') : 'No users logged in'}</p>
+      <div className="security-overview-container">
+        <div className="security-overview-card">
+          <h2 className="security-overview-header">Security Overview</h2>
+
+          <div className="security-overview-item">
+            <span className="security-overview-label">System Uptime (Hours):</span>
+            <span className="security-overview-value">{overview.value.uptimeHours}</span>
+          </div>
+
+          <div className="security-overview-item">
+            <span className="security-overview-label">Antivirus Status:</span>
+            <span className={`security-overview-value ${getStatusClass(overview.value.antivirusStatus)}`}>
+            {overview.value.antivirusStatus}
+          </span>
+          </div>
+
+          <div className="security-overview-item">
+            <span className="security-overview-label">Firewall Status:</span>
+            <span className={`security-overview-value ${getStatusClass(overview.value.firewallStatus)}`}>
+            {overview.value.firewallStatus}
+          </span>
+          </div>
+
+          <div className="security-overview-item">
+            <span className="security-overview-label">Logged in user:</span>
+            <span className={`security-overview-value ${getStatusClass(overview.value.loggedInUsers)}`}>
+            {overview.value.loggedInUsers}
+          </span>
+          </div>
+        </div>
       </div>
   );
 };
