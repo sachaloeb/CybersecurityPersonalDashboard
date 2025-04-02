@@ -63,4 +63,11 @@ app.MapPost("/api/evaluate", async (HttpRequest request) =>
     })
     .WithMetadata(new HttpPostAttribute());
 
+app.MapGet("/api/security-overview", () =>
+    {
+        var controller = new SecurityController();
+        return Results.Ok(controller.Overview());
+    })
+    .WithMetadata(new HttpGetAttribute());
+
 app.Run();

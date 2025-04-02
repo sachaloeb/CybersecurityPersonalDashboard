@@ -1,90 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './SecurityOverview.css';
+import "./SecurityOverview.css";
 
-function SecurityOverview() {
-  const [data, setData] = useState(null);
+const SecurityOverview = () => {
+  const [overview, setOverview] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch security overview data on component mount
   useEffect(() => {
     const fetchSecurityOverview = async () => {
       try {
-        const response = await axios.get('http://0.0.0.0:5050/api/security_overview');
-        if (response.headers['content-type'].includes('application/json')) {
-          setData(response.data);
-        } else {
-          throw new Error('Unexpected response format');
-        }
+        const response = await axios.get('https://localhost:7122/api/security-overview');
+        console.log(response.data);
+        setOverview(response.data);
       } catch (err) {
-        console.error('Error fetching security overview:', err);
-        setError(err.message);
+        setError(err);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchSecurityOverview();
   }, []);
 
-  // Helper function to apply color-coded classes based on status
-  const getStatusClass = (status) => {
-    if (!status) return '';
-    const normalized = status.toLowerCase();
-    if (normalized.includes('enabled') || normalized.includes('active') || normalized.includes('on')) {
-      return 'status-enabled';
-    } else if (normalized.includes('disabled') || normalized.includes('inactive') || normalized.includes('off')) {
-      return 'status-disabled';
-    }
-    return '';
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  // Render error state
   if (error) {
-    return (
-      <div className="security-overview-container">
-        <div className="security-overview-card">
-          <div className="security-overview-message">Error: {error}</div>
-        </div>
-      </div>
-    );
+    return <div>Error fetching security overview: {error.message}</div>;
   }
 
-  // Render loading state
-  if (!data) {
-    return (
-      <div className="security-overview-container">
-        <div className="security-overview-card">
-          <div className="security-overview-message">Loading...</div>
-        </div>
-      </div>
-    );
+  if (!overview || !overview.value) {
+    return <div>No data available</div>;
   }
 
-  // Render the security overview card
   return (
-    <div className="security-overview-container">
-      <div className="security-overview-card">
-        <h2 className="security-overview-header">Security Overview</h2>
-
-        <div className="security-overview-item">
-          <span className="security-overview-label">System Uptime (Hours):</span>
-          <span className="security-overview-value">{data.uptimeHours}</span>
-        </div>
-
-        <div className="security-overview-item">
-          <span className="security-overview-label">Antivirus Status:</span>
-          <span className={`security-overview-value ${getStatusClass(data.antivirusStatus)}`}>
-            {data.antivirusStatus}
-          </span>
-        </div>
-
-        <div className="security-overview-item">
-          <span className="security-overview-label">Firewall Status:</span>
-          <span className={`security-overview-value ${getStatusClass(data.firewallStatus)}`}>
-            {data.firewallStatus}
-          </span>
-        </div>
+      <div>
+        <h1>Security Overview</h1>
+        <p>Uptime Hours: {overview.value.uptimeHours}</p>
+        <p>Firewall Status: {overview.value.firewallStatus}</p>
+        <p>Antivirus Status: {overview.value.antivirusStatus}</p>
+        <p>Logged In Users: {overview.value.loggedInUsers ? overview.value.loggedInUsers.join(', ') : 'No users logged in'}</p>
       </div>
-    </div>
   );
-}
+};
 
 export default SecurityOverview;

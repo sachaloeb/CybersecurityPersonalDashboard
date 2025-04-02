@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CyberDashboard.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+36447566493a80fd3ee70099165241ecc594d258")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f6143743218a2ee445ddf2acf836231045d3d8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("CyberDashboard.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CyberDashboard.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
