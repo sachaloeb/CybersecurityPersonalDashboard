@@ -20,6 +20,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPortScannerService, PortScannerService>(); // ✅ Register service
+builder.Services.AddHttpClient<ZapScannerService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

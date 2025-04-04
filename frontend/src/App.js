@@ -7,6 +7,7 @@ import SecurityOverview from './pages/SecurityOverview';
 import PasswordChecker from "./pages/PasswordChecker";
 import './App.css';
 import PortScannerForm from "./pages/PortScannerForm";
+import ZapAlertTable from "./pages/ZapAlertTable";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/connections-table" element={<ConnectionsTable />} />
                 <Route path="/password-checker" element={<PasswordChecker />} />
               <Route path={"/port-scanner"} element={<PortScannerForm />} />
+                <Route path="/zap-alert-table" element={<ZapAlertTable />} />
               {/* Add more routes as needed */}
             </Routes>
           </div>

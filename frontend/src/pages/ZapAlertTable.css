@@ -1,0 +1,52 @@
+/* ZapAlertTable.css */
+
+.zap-container {
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.zap-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.zap-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.zap-table th {
+    text-align: left;
+    border-bottom: 2px solid #ccc;
+    padding: 0.5rem;
+}
+
+.zap-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.zap-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.risk-high {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.risk-medium {
+    color: #ca8a04;
+    font-weight: 600;
+}
+
+.risk-low {
+    color: #16a34a;
+}
+
+.risk-unknown {
+    color: #6b7280;
+}
