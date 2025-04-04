@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './PortScannerForm.css';
 
 const PortScannerForm = () => {
     const [ip, setIp] = useState('');
@@ -32,63 +33,53 @@ const PortScannerForm = () => {
     };
 
     return (
-        <div className="p-6 max-w-xl mx-auto bg-white rounded-2xl shadow-2xl mt-10;">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">🔍 Port Scanner</h2>
+        <div className="portscanner-container">
+            <h2 className="title">Port Scanner</h2>
 
-            <div className="space-y-3">
+            <input
+                className="input"
+                type="text"
+                placeholder="Target IP"
+                value={ip}
+                onChange={(e) => setIp(e.target.value)}
+            />
+            <div className="input-group">
                 <input
-                    className="border border-gray-300 p-3 rounded w-full focus:ring-2 focus:ring-blue-500"
-                    type="text"
-                    placeholder="Target IP (e.g. 127.0.0.1)"
-                    value={ip}
-                    onChange={(e) => setIp(e.target.value)}
+                    className="input"
+                    type="number"
+                    placeholder="Start Port"
+                    value={startPort}
+                    onChange={(e) => setStartPort(e.target.value)}
                 />
-                <div className="flex gap-3">
-                    <input
-                        className="border border-gray-300 p-3 rounded w-full focus:ring-2 focus:ring-blue-500"
-                        type="number"
-                        placeholder="Start Port"
-                        value={startPort}
-                        onChange={(e) => setStartPort(e.target.value)}
-                    />
-                    <input
-                        className="border border-gray-300 p-3 rounded w-full focus:ring-2 focus:ring-blue-500"
-                        type="number"
-                        placeholder="End Port"
-                        value={endPort}
-                        onChange={(e) => setEndPort(e.target.value)}
-                    />
-                </div>
-
-                <button
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200"
-                    onClick={handleScan}
-                    disabled={loading}
-                >
-                    {loading ? 'Scanning...' : '🚀 Scan Ports'}
-                </button>
+                <input
+                    className="input"
+                    type="number"
+                    placeholder="End Port"
+                    value={endPort}
+                    onChange={(e) => setEndPort(e.target.value)}
+                />
             </div>
+            <button
+                className="scan-button"
+                onClick={handleScan}
+                disabled={loading}
+            >
+                {loading ? 'Scanning...' : 'Scan Ports'}
+            </button>
 
-            {error && (
-                <div className="mt-4 p-3 bg-red-100 text-red-800 rounded shadow">
-                    ⚠️ {error}
-                </div>
-            )}
+            {error && <div className="error">{error}</div>}
 
-            <div className="mt-6">
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">🧭 Open Ports:</h3>
-                {loading && <p className="text-gray-500 italic">Scanning, please wait...</p>}
-
+            <div className="results">
+                <h3>Open Ports:</h3>
+                {loading && <p className="status">Scanning...</p>}
                 {!loading && results.length > 0 ? (
-                    <ul className="list-disc pl-6 text-green-700 space-y-1 transition-all">
+                    <ul>
                         {results.map((port) => (
                             <li key={port}>Port {port} is open</li>
                         ))}
                     </ul>
                 ) : (
-                    !loading && (
-                        <p className="text-gray-500 italic">No open ports found or scan not yet run.</p>
-                    )
+                    !loading && <p className="status">No open ports found or scan not yet run.</p>
                 )}
             </div>
         </div>

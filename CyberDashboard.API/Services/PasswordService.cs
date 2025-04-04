@@ -9,10 +9,7 @@ public static class PasswordService
     {
         // Evaluate with Zxcvbn
         var zxcvbnResult = Zxcvbn.Core.EvaluatePassword(password);
-
-        // Print the entire content of zxcvbnResult
-        string zxcvbnResultJson = JsonSerializer.Serialize(zxcvbnResult, new JsonSerializerOptions { WriteIndented = true });
-        Console.WriteLine($"Password Evaluation Result: {zxcvbnResultJson}");
+        
 
         // Hash the password (SHA-256)
         string hashed = HashPasswordSha256(password);
