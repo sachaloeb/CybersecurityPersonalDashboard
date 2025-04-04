@@ -21,7 +21,6 @@ builder.Services.AddCors(options =>
 
 // Add controllers
 builder.Services.AddControllers();
-
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -69,5 +68,23 @@ app.MapGet("/api/security-overview", () =>
         return Results.Ok(controller.Overview());
     })
     .WithMetadata(new HttpGetAttribute());
+
+app.MapGet("/api/scan", async (IPortScannerService scannerService, [FromQuery] string ip, [FromQuery] int startPort, [FromQuery] int endPort) =>
+{
+    if (string.IsNullOrWhiteSpace(ip) || startPort < 1 || endPort > 65535 || startPort > endPort)
+    {
+        return Results.BadRequest("Invalid IP address or port range.");
+    }
+
+    var request = new PortScanRequest
+    {
+        Ip = ip,
+        StartPort = startPort,
+        EndPort = endPort
+    };
+    var controller = new PortScannerController(scannerService);
+    return Results.Ok(controller.ScanPorts(request));
+})
+.WithMetadata(new HttpGetAttribute());
 
 app.Run();
