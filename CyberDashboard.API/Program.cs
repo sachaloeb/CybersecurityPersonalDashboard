@@ -8,7 +8,6 @@ using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add CORS, etc.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
@@ -19,18 +18,19 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add controllers
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddScoped<IPortScannerService, PortScannerService>(); // ✅ Register service
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 app.UseCors("AllowLocalhost3000");
 
-// If environment is Development, show OpenAPI docs
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 // app.UseHttpsRedirection();
@@ -69,22 +69,6 @@ app.MapGet("/api/security-overview", () =>
     })
     .WithMetadata(new HttpGetAttribute());
 
-app.MapGet("/api/scan", async (IPortScannerService scannerService, [FromQuery] string ip, [FromQuery] int startPort, [FromQuery] int endPort) =>
-{
-    if (string.IsNullOrWhiteSpace(ip) || startPort < 1 || endPort > 65535 || startPort > endPort)
-    {
-        return Results.BadRequest("Invalid IP address or port range.");
-    }
-
-    var request = new PortScanRequest
-    {
-        Ip = ip,
-        StartPort = startPort,
-        EndPort = endPort
-    };
-    var controller = new PortScannerController(scannerService);
-    return Results.Ok(controller.ScanPorts(request));
-})
-.WithMetadata(new HttpGetAttribute());
+app.MapControllers();
 
 app.Run();
