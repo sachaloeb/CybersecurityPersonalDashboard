@@ -8,6 +8,7 @@ import PasswordChecker from "./pages/PasswordChecker";
 import './App.css';
 import PortScannerForm from "./pages/PortScannerForm";
 import ZapAlertTable from "./pages/ZapAlertTable";
+import ThreatSimulation from "./pages/ThreatSimulation";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/password-checker" element={<PasswordChecker />} />
               <Route path={"/port-scanner"} element={<PortScannerForm />} />
                 <Route path="/zap-alert-table" element={<ZapAlertTable />} />
+                <Route path="/threat-simulation" element={<ThreatSimulation />} />
               {/* Add more routes as needed */}
             </Routes>
           </div>
