@@ -145,3 +145,26 @@
 .zap-tags a:hover {
     background-color: #bae6fd;
 }
+
+.zap-cve-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f1f5f9;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.zap-cve-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.zap-cve-card {
+    background: white;
+    border-left: 4px solid #2563eb;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}

@@ -3,22 +3,29 @@ import './ZapAlertTable.css';
 
 const ZapAlertTable = () => {
     const [alerts, setAlerts] = useState([]);
+    const [cves, setCves] = useState([]);
     const [url, setUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState(null);
 
     const getRiskClass = (risk) => {
         switch (risk.toLowerCase()) {
-            case 'high':
-                return 'risk-high';
-            case 'medium':
-                return 'risk-medium';
-            case 'low':
-                return 'risk-low';
-            case 'informational':
-                return 'risk-informational';
-            default:
-                return 'risk-unknown';
+            case 'high': return 'risk-high';
+            case 'medium': return 'risk-medium';
+            case 'low': return 'risk-low';
+            case 'informational': return 'risk-informational';
+            default: return 'risk-unknown';
+        }
+    };
+
+    const fetchCves = async (keyword) => {
+        try {
+            const res = await fetch(`https://localhost:7122/api/vulnerability/cves?keyword=${encodeURIComponent(keyword)}`);
+            const data = await res.json();
+            console.log('Fetched CVEs:', data);
+            setCves(data || []);
+        } catch (err) {
+            console.error('Error fetching CVEs:', err);
         }
     };
 
@@ -27,18 +34,18 @@ const ZapAlertTable = () => {
 
         setLoading(true);
         setAlerts([]);
+        setCves([]);
 
         try {
             const response = await fetch('https://localhost:7122/api/vulnerability/scan', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(url)
             });
 
             const result = await response.json();
             setAlerts(result || []);
+            fetchCves(url);
         } catch (err) {
             console.error('Error triggering ZAP scan:', err);
         } finally {
@@ -67,8 +74,7 @@ const ZapAlertTable = () => {
                 </button>
             </div>
 
-            {alerts.length > 0 && <h3 className="zap-results-title">Scan Results</h3>}
-
+            {alerts.length > 0 && <h3 className="zap-results-title">ZAP Scan Results</h3>}
             {alerts.length === 0 && !loading && <p className="zap-empty">No alerts to display.</p>}
 
             {alerts.map((alert, index) => (
@@ -107,6 +113,22 @@ const ZapAlertTable = () => {
                     )}
                 </div>
             ))}
+
+            {cves.length > 0 && (
+                <div className="zap-cve-section">
+                    <h3>Related CVEs</h3>
+                    <ul>
+                        {cves.map((cve, idx) => (
+                            <li key={idx} className="zap-cve-card">
+                                <strong>{cve.id}</strong>
+                                <p>{cve.description}</p>
+                                <p><strong>Severity:</strong> {cve.severity}</p>
+                                <p><strong>Published:</strong> {new Date(cve.published).toLocaleDateString()}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 };

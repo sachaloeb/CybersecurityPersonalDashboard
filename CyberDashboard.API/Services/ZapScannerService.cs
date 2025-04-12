@@ -40,6 +40,38 @@ public class ZapScannerService
 
         return alerts;
     }
+    
+    public async Task<List<CveEntry>> GetCvesForKeywordAsync(string keyword)
+    {
+        var encodedKeyword = Uri.EscapeDataString(keyword);
+        Console.WriteLine($"Encoded keyword: {encodedKeyword}");
+        var response = await _httpClient.GetAsync(
+            $"https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch={encodedKeyword}&resultsPerPage=5");
+
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+
+        var root = JsonDocument.Parse(json);
+        var result = new List<CveEntry>();
+
+        foreach (var item in root.RootElement.GetProperty("vulnerabilities").EnumerateArray())
+        {
+            var cve = item.GetProperty("cve");
+            result.Add(new CveEntry
+            {
+                Id = cve.GetProperty("id").GetString(),
+                Description = cve.GetProperty("descriptions")[0].GetProperty("value").GetString(),
+                Severity = cve.TryGetProperty("metrics", out var metrics) && 
+                           metrics.TryGetProperty("cvssMetricV31", out var cvssArray) && 
+                           cvssArray[0].TryGetProperty("cvssData", out var cvssData)
+                    ? cvssData.GetProperty("baseSeverity").GetString()
+                    : "Unknown",
+                Published = cve.GetProperty("published").GetString()
+            });
+        }
+
+        return result;
+    }
 
 	public async Task StartScanAsync(string url)
 	{
