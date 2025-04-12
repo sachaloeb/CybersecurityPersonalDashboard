@@ -28,7 +28,13 @@ public class ZapScannerService
             {
                 Alert = alert.GetProperty("alert").GetString(),
                 Risk = alert.GetProperty("risk").GetString(),
-                Url = alert.GetProperty("url").GetString()
+                Url = alert.GetProperty("url").GetString(),
+                Description = alert.TryGetProperty("description", out var desc) ? desc.GetString() : null,
+                Solution = alert.TryGetProperty("solution", out var sol) ? sol.GetString() : null,
+                Reference = alert.TryGetProperty("reference", out var refVal) ? refVal.GetString() : null,
+                Tags = alert.TryGetProperty("tags", out var tags) && tags.ValueKind == JsonValueKind.Object
+                    ? tags.EnumerateObject().ToDictionary(x => x.Name, x => x.Value.GetString() ?? "")
+                    : new Dictionary<string, string>()
             });
         }
 
