@@ -92,7 +92,7 @@
             },
             "System.Text.Json": {
               "target": "Package",
-              "version": "[9.0.3, )"
+              "version": "[9.0.4, )"
             },
             "xunit": {
               "target": "Package",

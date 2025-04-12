@@ -5,16 +5,37 @@ const PortScannerForm = () => {
     const [ip, setIp] = useState('');
     const [startPort, setStartPort] = useState(20);
     const [endPort, setEndPort] = useState(1024);
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleScan = async () => {
+    //const handleScan = async () => {
+    //     setLoading(true);
+    //     setError(null);
+    //     setResults([]);
+    //     try {
+    //         const response = await fetch('https://localhost:7122/api/portscanner/scan', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({ ip, startPort, endPort })
+    //         });
+    //
+    //         if (!response.ok) {
+    //             throw new Error('Failed to scan ports');
+    //         }
+    //
+    //         const data = await response.json();
+    //         setResults(data.openPorts);
+    //     } catch (err) {
+    //         setError(err.message);
+    //     }
+    //     setLoading(false);
+    // };
+    const handleDetailedScan = async () => {
         setLoading(true);
         setError(null);
-        setResults([]);
         try {
-            const response = await fetch('https://localhost:7122/api/portscanner/scan', {
+            const response = await fetch('https://localhost:7122/api/portscanner/scan-detailed', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ip, startPort, endPort })
@@ -25,7 +46,8 @@ const PortScannerForm = () => {
             }
 
             const data = await response.json();
-            setResults(data.openPorts);
+            console.log(data);          // The full object from the server
+            setResults(data);           // Save the entire result object
         } catch (err) {
             setError(err.message);
         }
@@ -61,7 +83,7 @@ const PortScannerForm = () => {
             </div>
             <button
                 className="scan-button"
-                onClick={handleScan}
+                onClick={handleDetailedScan}
                 disabled={loading}
             >
                 {loading ? 'Scanning...' : 'Scan Ports'}
@@ -70,16 +92,26 @@ const PortScannerForm = () => {
             {error && <div className="error">{error}</div>}
 
             <div className="results">
-                <h3>Open Ports:</h3>
+                <h3>Scan Results:</h3>
                 {loading && <p className="status">Scanning...</p>}
-                {!loading && results.length > 0 ? (
-                    <ul>
-                        {results.map((port) => (
-                            <li key={port}>Port {port} is open</li>
-                        ))}
-                    </ul>
+
+                {!loading && results && results.ports && results.ports.length > 0 ? (
+                    <>
+                        <p>IP: {results.ip}</p>
+                        <p>Host Up: {results.isHostUp ? 'Yes' : 'No'}</p>
+                        <p>Scan Duration: {results.scanDuration}</p>
+                        <ul>
+                            {results?.ports
+                                ?.filter((p) => p.state === "Open")
+                                .map((p) => (
+                                    <li key={p.port}>
+                                        Port {p.port} is {p.state}
+                                    </li>
+                                ))}
+                        </ul>
+                    </>
                 ) : (
-                    !loading && <p className="status">No open ports found or scan not yet run.</p>
+                    !loading && <p className="status">No data or scan not yet run.</p>
                 )}
             </div>
         </div>

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dCQSGIxfH4c=",
+  "dgSpecHash": "pWx4vsFy/fc=",
   "success": true,
   "projectFilePath": "/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/CyberDashboard.API.csproj",
   "expectedPackageFiles": [
@@ -92,7 +92,7 @@
     "/Users/sachaloeb/.nuget/packages/system.security.accesscontrol/5.0.0/system.security.accesscontrol.5.0.0.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/system.security.principal.windows/5.0.0/system.security.principal.windows.5.0.0.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
-    "/Users/sachaloeb/.nuget/packages/system.text.json/9.0.3/system.text.json.9.0.3.nupkg.sha512",
+    "/Users/sachaloeb/.nuget/packages/system.text.json/9.0.4/system.text.json.9.0.4.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/system.threading.tasks.extensions/4.6.0/system.threading.tasks.extensions.4.6.0.nupkg.sha512",
     "/Users/sachaloeb/.nuget/packages/xunit/2.9.3/xunit.2.9.3.nupkg.sha512",

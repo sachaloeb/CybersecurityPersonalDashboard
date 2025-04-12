@@ -1,37 +1,42 @@
+// MongoLogService.cs
 using MongoDB.Driver;
-using MongoDB.Bson;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
-/// <summary>
-/// Stores brute-force logs in MongoDB (bulk data).
-/// </summary>
 public class MongoLogService
 {
+    private readonly IMongoDatabase _database;
     private readonly IMongoCollection<SshAttemptLog> _logCollection;
 
     public MongoLogService(IConfiguration config)
     {
-        // 1) Grab your MongoDB connection string from config
         var mongoConnection = config.GetConnectionString("MongoDB");
-
-        // 2) Initialize the client and database
         var client = new MongoClient(mongoConnection);
-        var database = client.GetDatabase("CyberDashboardNoSQL"); 
-        // or any db name you prefer
 
-        // 3) Create the collection for logs
-        _logCollection = database.GetCollection<SshAttemptLog>("SshAttemptLogs");
+        // Use your existing database name
+        _database = client.GetDatabase("CyberDashboardNoSQL");
+
+        // This is your original SshAttemptLogs collection
+        _logCollection = _database.GetCollection<SshAttemptLog>("SshAttemptLogs");
     }
 
+    // Keep your existing InsertLogAsync, GetAllLogsAsync, etc.
+
+    // New: Provide a generic method to retrieve any collection
+    public IMongoCollection<T> GetCollection<T>(string collectionName)
+    {
+        return _database.GetCollection<T>(collectionName);
+    }
+    
+    // MongoLogService.cs
     public async Task InsertLogAsync(SshAttemptLog log)
     {
+        // insert into _logCollection, which is the SshAttemptLogs collection
         await _logCollection.InsertOneAsync(log);
     }
 
     public async Task<List<SshAttemptLog>> GetAllLogsAsync()
     {
-        // Sort by descending Timestamp
+        // read all from _logCollection, sorted descending
         return await _logCollection
             .Find(Builders<SshAttemptLog>.Filter.Empty)
             .SortByDescending(l => l.Timestamp)

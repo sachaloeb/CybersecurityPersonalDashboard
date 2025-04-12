@@ -63,6 +63,7 @@
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/System.Composition.Runtime.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/System.Composition.TypedParts.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/System.Management.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/System.Text.Json.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/xunit.assert.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/xunit.core.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/xunit.execution.dotnet.dll
