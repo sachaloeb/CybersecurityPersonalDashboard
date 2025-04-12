@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Bson;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +26,31 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IPortScannerService, PortScannerService>(); // ✅ Register service
 builder.Services.AddHttpClient<ZapScannerService>();
 builder.Services.AddScoped<SshBruteForceService>();
+// 1) Add PostgreSQL for analytics / reports
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Database=cyber_dashboard;Username=sloeb;Password=yourpassword"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
+
+// 2) Add MongoLogService for storing logs in MongoDB
+builder.Services.AddSingleton<MongoLogService>();
+//builder.Services.AddDbContext<AppDbContext>(options =>
+   // options.UseNpgsql("Host=localhost;Port=5432;Database=cyber_dashboard;Username=sloeb;Password=eDceBn3h"));
+//const string connectionUri = "mongodb+srv://sachaloeb:xfBD6K8Vpm6GTmNx@cluster0.3fjol.mongodb.net/CyberDashboardNoSQL?retryWrites=true&w=majority&appName=Cluster0";
+//var settings = MongoClientSettings.FromConnectionString(connectionUri);
+// Set the ServerApi field of the settings object to set the version of the Stable API on the client
+//settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+// Create a new client and connect to the server
+//var client = new MongoClient(settings);
+// Send a ping to confirm a successful connection
+//try {
+  //var result = client.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
+  //Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
+//} catch (Exception ex) {
+  //Console.WriteLine(ex);
+//}
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = long.MaxValue; // risky if you have no other checks
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

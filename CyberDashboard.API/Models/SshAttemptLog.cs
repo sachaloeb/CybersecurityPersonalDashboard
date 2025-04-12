@@ -1,9 +1,15 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 public class SshAttemptLog
 {
-    public int Id { get; set; }
-    public required string IPAddress { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; } // Optional - mask on frontend or omit
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; set; }
+
+    public string IPAddress { get; set; } = "";
+    public string Username { get; set; } = "";
+    public string Password { get; set; } = "";
     public bool Success { get; set; }
     public DateTime Timestamp { get; set; }
 }

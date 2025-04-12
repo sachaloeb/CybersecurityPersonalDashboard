@@ -25,14 +25,13 @@ public class SshAttackController : ControllerBase
             return BadRequest("No file uploaded.");
 
         var passwords = new List<string>();
-        using (var reader = new StreamReader(file.OpenReadStream()))
+        // We can read line by line, but watch memory usage if the file is huge
+        using var reader = new StreamReader(file.OpenReadStream());
+        while (!reader.EndOfStream)
         {
-            while (!reader.EndOfStream)
-            {
-                var line = await reader.ReadLineAsync();
-                if (!string.IsNullOrWhiteSpace(line))
-                    passwords.Add(line.Trim());
-            }
+            var line = await reader.ReadLineAsync();
+            if (!string.IsNullOrWhiteSpace(line))
+                passwords.Add(line.Trim());
         }
 
         var results = await _sshService.SimulateAttack(ip, username, passwords);
@@ -40,8 +39,11 @@ public class SshAttackController : ControllerBase
     }
 
     [HttpGet("logs")]
-    public async Task<IActionResult> GetLogs()
+    public async Task<IActionResult> GetLogs([FromQuery] string source = "mongo")
     {
-        return Ok(await _sshService.GetAllLogs());
+        if (source == "postgres")
+            return Ok(await _sshService.GetAllLogsFromPostgres());
+        else
+            return Ok(await _sshService.GetAllLogsFromMongo());
     }
 }

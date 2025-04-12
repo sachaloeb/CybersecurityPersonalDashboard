@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './ThreatSimulation.css';
 
-const ThreatSimulationUpload = () => {
+const ThreatSimulation = () => {
     const [ip, setIp] = useState('');
     const [username, setUsername] = useState('');
     const [passwordText, setPasswordText] = useState('');
@@ -18,32 +18,47 @@ const ThreatSimulationUpload = () => {
         e.preventDefault();
         setLoading(true);
 
-        const formData = new FormData();
-        formData.append('ip', ip);
-        formData.append('username', username);
-        if (file) formData.append('file', file);
+        let combinedLogs = [];
 
         try {
-            const response = await axios.post('https://localhost:7122/api/sshattack/simulate-from-file', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            // 1) If user chose a file, call /simulate-from-file
+            if (file) {
+                const formData = new FormData();
+                formData.append('ip', ip);
+                formData.append('username', username);
+                formData.append('file', file);
 
+                const fileResponse = await axios.post(
+                    'https://localhost:7122/api/sshattack/simulate-from-file',
+                    formData,
+                    {
+                        headers: { 'Content-Type': 'multipart/form-data' },
+                    }
+                );
+
+                combinedLogs = fileResponse.data;
+            }
+
+            // 2) If user typed in password lines, call /simulate
             const textPasswords = passwordText
                 .split('\n')
-                .map(p => p.trim())
-                .filter(p => p.length > 0);
+                .map((p) => p.trim())
+                .filter((p) => p.length > 0);
 
             if (textPasswords.length > 0) {
-                const textResponse = await axios.post('https://localhost:7122/api/sshattack/simulate', {
-                    ip,
-                    username,
-                    passwords: textPasswords,
-                });
-
-                setResult([...response.data, ...textResponse.data]);
-            } else {
-                setResult(response.data);
+                const textResponse = await axios.post(
+                    'https://localhost:7122/api/sshattack/simulate',
+                    {
+                        ip,
+                        username,
+                        passwords: textPasswords,
+                    }
+                );
+                combinedLogs = [...combinedLogs, ...textResponse.data];
             }
+
+            // 3) If neither file nor text, combinedLogs remains empty
+            setResult(combinedLogs);
         } catch (err) {
             alert('Simulation failed');
             console.error(err);
@@ -73,6 +88,7 @@ const ThreatSimulationUpload = () => {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                 />
+
                 <textarea
                     className="textarea"
                     rows={5}
@@ -80,12 +96,16 @@ const ThreatSimulationUpload = () => {
                     value={passwordText}
                     onChange={(e) => setPasswordText(e.target.value)}
                 />
+
+                <label htmlFor="fileInput">Or upload a .txt file:</label>
                 <input
+                    id="fileInput"
                     className="input"
                     type="file"
                     accept=".txt"
                     onChange={handleFileChange}
                 />
+
                 <button className="button" type="submit" disabled={loading}>
                     {loading ? 'Running...' : 'Simulate Attack'}
                 </button>
@@ -122,4 +142,4 @@ const ThreatSimulationUpload = () => {
     );
 };
 
-export default ThreatSimulationUpload;
+export default ThreatSimulation;

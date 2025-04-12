@@ -9,6 +9,7 @@
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/CyberDashboard.API.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/CyberDashboard.API.pdb
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/BouncyCastle.Cryptography.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/DnsClient.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Humanizer.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Microsoft.Bcl.AsyncInterfaces.dll
@@ -43,10 +44,14 @@
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Microsoft.TestPlatform.Utilities.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Microsoft.VisualStudio.TestPlatform.Common.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/testhost.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/MongoDB.Bson.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/MongoDB.Driver.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Mono.TextTemplating.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Newtonsoft.Json.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Npgsql.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/SharpCompress.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Snappier.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Renci.SshNet.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -61,6 +66,7 @@
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/xunit.assert.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/xunit.core.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/xunit.execution.dotnet.dll
+/Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/ZstdSharp.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/zxcvbn-core.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/cs/Microsoft.CodeAnalysis.resources.dll
 /Users/sachaloeb/Documents/CybersecurityPersonalDashboard/CyberDashboard.API/bin/Debug/net9.0/de/Microsoft.CodeAnalysis.resources.dll
