@@ -12,9 +12,13 @@ public class SshAttackController : ControllerBase
     }
 
     [HttpPost("simulate")]
-    public async Task<IActionResult> Simulate([FromBody] AttackRequest request)
+    public async Task<IActionResult> Simulate([FromBody] BruteForceRequest request)
     {
-        var results = await _sshService.SimulateAttack(request.IP, request.Username, request.Passwords);
+        var results = await _sshService.SimulateAttack(
+            request.TargetIp, 
+            request.Username,
+            request.Passwords
+        );
         return Ok(results);
     }
     
@@ -41,9 +45,6 @@ public class SshAttackController : ControllerBase
     [HttpGet("logs")]
     public async Task<IActionResult> GetLogs([FromQuery] string source = "mongo")
     {
-        if (source == "postgres")
-            return Ok(await _sshService.GetAllLogsFromPostgres());
-        else
-            return Ok(await _sshService.GetAllLogsFromMongo());
+        return Ok(await _sshService.GetAllLogsFromMongo());
     }
 }

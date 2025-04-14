@@ -74,7 +74,7 @@ const ZapAlertTable = () => {
                 </button>
             </div>
 
-            {alerts.length > 0 && <h3 className="zap-results-title">ZAP Scan Results</h3>}
+            {alerts.length > 0 && <h3 className="zap-results-title">Scan Results</h3>}
             {alerts.length === 0 && !loading && <p className="zap-empty">No alerts to display.</p>}
 
             {alerts.map((alert, index) => (

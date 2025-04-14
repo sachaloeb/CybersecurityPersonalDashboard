@@ -1,45 +1,34 @@
-// MongoLogService.cs
 using MongoDB.Driver;
-using Microsoft.Extensions.Configuration;
 
 public class MongoLogService
 {
     private readonly IMongoDatabase _database;
-    private readonly IMongoCollection<SshAttemptLog> _logCollection;
+    private readonly IMongoCollection<ThreatLog> _logCollection;
 
     public MongoLogService(IConfiguration config)
     {
         var mongoConnection = config.GetConnectionString("MongoDB");
         var client = new MongoClient(mongoConnection);
+        var database = client.GetDatabase("CyberDashboardNoSQL");
 
-        // Use your existing database name
-        _database = client.GetDatabase("CyberDashboardNoSQL");
-
-        // This is your original SshAttemptLogs collection
-        _logCollection = _database.GetCollection<SshAttemptLog>("SshAttemptLogs");
+        _logCollection = database.GetCollection<ThreatLog>("ThreatLogs");
     }
 
-    // Keep your existing InsertLogAsync, GetAllLogsAsync, etc.
-
-    // New: Provide a generic method to retrieve any collection
-    public IMongoCollection<T> GetCollection<T>(string collectionName)
+    public async Task InsertLogAsync(ThreatLog log)
     {
-        return _database.GetCollection<T>(collectionName);
-    }
-    
-    // MongoLogService.cs
-    public async Task InsertLogAsync(SshAttemptLog log)
-    {
-        // insert into _logCollection, which is the SshAttemptLogs collection
         await _logCollection.InsertOneAsync(log);
     }
 
-    public async Task<List<SshAttemptLog>> GetAllLogsAsync()
+    public async Task<List<ThreatLog>> GetAllLogsAsync()
     {
-        // read all from _logCollection, sorted descending
         return await _logCollection
-            .Find(Builders<SshAttemptLog>.Filter.Empty)
+            .Find(Builders<ThreatLog>.Filter.Empty)
             .SortByDescending(l => l.Timestamp)
             .ToListAsync();
+    }
+
+    public IMongoCollection<T> GetCollection<T>(string name)
+    {
+        return _database.GetCollection<T>(name);
     }
 }

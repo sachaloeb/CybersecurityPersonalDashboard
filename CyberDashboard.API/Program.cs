@@ -23,8 +23,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IPortScannerService, PortScannerService>(); // ✅ Register service
+builder.Services.AddScoped<IPortScannerService, PortScannerService>();
 builder.Services.AddHttpClient<ZapScannerService>();
+builder.Services.AddSingleton<ThreatLogService>();
+builder.Services.AddScoped<ThreatSimulationService>();
 builder.Services.AddScoped<SshBruteForceService>();
 // 1) Add PostgreSQL for analytics / reports
 builder.Services.AddDbContext<AppDbContext>(options =>
