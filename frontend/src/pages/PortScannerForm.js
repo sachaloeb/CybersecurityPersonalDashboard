@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './PortScannerForm.css';
 
 const PortScannerForm = () => {
@@ -8,6 +8,14 @@ const PortScannerForm = () => {
     const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        fetch("https://localhost:7122/api/portscanner/history?take=10")
+            .then(r => r.json())
+            .then(setRows)
+            .catch(console.error);
+    }, []);
 
     //const handleScan = async () => {
     //     setLoading(true);
@@ -31,6 +39,13 @@ const PortScannerForm = () => {
     //     }
     //     setLoading(false);
     // };
+    function badgeColor(status) {
+        switch (status) {
+            case "Complete": return "#4caf50";
+            case "Error":    return "#e53935";
+            default:         return "#ffb300";   // Pending / Unknown
+        }
+    }
     const handleDetailedScan = async () => {
         setLoading(true);
         setError(null);
@@ -109,10 +124,46 @@ const PortScannerForm = () => {
                                     </li>
                                 ))}
                         </ul>
+                        <p>
+                            Status:&nbsp;
+                            <span style={{
+                                background: badgeColor(results.status),
+                                color: "white", padding: "2px 8px",
+                                borderRadius: "4px", fontSize: "0.8rem"
+                            }}>
+                                {results.status}
+                            </span>
+                        </p>
                     </>
                 ) : (
                     !loading && <p className="status">No data or scan not yet run.</p>
                 )}
+            </div>
+
+            <div style={{marginTop: 40}}>
+                <h3>Recent Scans</h3>
+                <table style={{width: "100%", borderCollapse: "collapse"}}>
+                    <thead>
+                    <tr>
+                        <th>Host</th>
+                        <th>Ports</th>
+                        <th>Started</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {rows.map(r => (
+                        <tr key={r.startedAt}>
+                            <td>{r.host}</td>
+                            <td>{r.startPort}-{r.endPort}</td>
+                            <td>{new Date(r.startedAt).toLocaleTimeString()}</td>
+                            <td>{r.duration ?? "—"}</td>
+                            <td style={{color: badgeColor(r.status)}}>{r.status}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

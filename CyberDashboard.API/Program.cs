@@ -22,7 +22,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+           .AddJsonOptions(opts =>
+           {
+              // Register the System.Text.Json converter that emits enum names instead of numbers
+                   opts.JsonSerializerOptions.Converters.Add(
+                           new System.Text.Json.Serialization.JsonStringEnumConverter()
+                       ); 
+           });
 builder.Services.AddScoped<IPortScannerService, PortScannerService>();
 builder.Services.AddHttpClient<ZapScannerService>();
 builder.Services.AddSingleton<ThreatLogService>();

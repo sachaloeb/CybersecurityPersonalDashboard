@@ -7,61 +7,93 @@ public class PortScannerService : IPortScannerService
 {
     // PortScannerService.cs
     private readonly IMongoCollection<DetailedPortScanResult> _scanHistoryCollection;
+    private readonly IMongoCollection<PortScanLog> _portScanLogs;
 
     public PortScannerService(MongoLogService mongoLogService)
     {
         // we can now call mongoLogService.GetCollection<T>()
         _scanHistoryCollection = mongoLogService.GetCollection<DetailedPortScanResult>("PortScanHistory");
+        _portScanLogs = mongoLogService.PortScanLogs;
     }
 
     public async Task<DetailedPortScanResult> ScanPortsDetailedAsync(PortScanRequest request)
     {
-        // 1) Start the clock to measure scan duration
         var stopwatch = Stopwatch.StartNew();
-
-        // 2) Check if host is up (basic “ping”)
-        bool isHostUp = await IsHostReachable(request.Ip);
-
-        // 3) Build your list of port statuses
-        var portStatuses = new List<PortStatusInfo>();
-        var tasks = new List<Task>();
-
-        for (int port = request.StartPort; port <= request.EndPort; port++)
+        var log = new PortScanLog
         {
-            int currentPort = port;
-            tasks.Add(Task.Run(async () =>
-            {
-                var portState = await CheckPortStatus(request.Ip, currentPort);
-                lock (portStatuses)
-                {
-                    portStatuses.Add(new PortStatusInfo
-                    {
-                        Port = currentPort,
-                        State = portState
-                    });
-                }
-            }));
-        }
-
-        await Task.WhenAll(tasks);
-
-        // Stop the timer
-        stopwatch.Stop();
-
-        // 4) Build the final result
-        var result = new DetailedPortScanResult
-        {
-            Ip = request.Ip,
-            IsHostUp = isHostUp,
-            Ports = portStatuses.OrderBy(p => p.Port).ToList(),
-            ScanDuration = stopwatch.Elapsed,
-            Timestamp = DateTime.UtcNow
+            Host = request.Ip,
+            StartPort = request.StartPort,
+            EndPort = request.EndPort,
+            StartedAt = DateTime.UtcNow
         };
+        await _portScanLogs.InsertOneAsync(log);
 
-        // 5) Save to MongoDB (for future comparisons)
-        await _scanHistoryCollection.InsertOneAsync(result);
+        try
+        {
+            bool isHostUp = await IsHostReachable(request.Ip);
 
-        return result;
+            // 3) Build your list of port statuses
+            var portStatuses = new List<PortStatusInfo>();
+            var tasks = new List<Task>();
+
+            for (int port = request.StartPort; port <= request.EndPort; port++)
+            {
+                int currentPort = port;
+                tasks.Add(Task.Run(async () =>
+                {
+                    var portState = await CheckPortStatus(request.Ip, currentPort);
+                    lock (portStatuses)
+                    {
+                        portStatuses.Add(new PortStatusInfo
+                        {
+                            Port = currentPort,
+                            State = portState
+                        });
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+
+            // Stop the timer
+            stopwatch.Stop();
+
+            // 4) Build the final result
+            var result = new DetailedPortScanResult
+            {
+                Ip = request.Ip,
+                IsHostUp = isHostUp,
+                Ports = portStatuses.OrderBy(p => p.Port).ToList(),
+                ScanDuration = stopwatch.Elapsed,
+                Timestamp = DateTime.UtcNow,
+                Status = ScanStatus.Complete
+            };
+
+            var update = Builders<PortScanLog>.Update
+                .Set(l => l.Status, ScanStatus.Complete)
+                .Set(l => l.EndedAt, DateTime.UtcNow)
+                .Set(l => l.Duration, stopwatch.Elapsed)
+                .Set(l => l.IsHostUp, isHostUp)
+                .Set(l => l.Ports, portStatuses);
+
+            await _portScanLogs.UpdateOneAsync(l => l.Id == log.Id, update);
+            // 5) Save to MongoDB (for future comparisons)
+            await _scanHistoryCollection.InsertOneAsync(result);
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            // 2. mark ERROR
+            await _portScanLogs.UpdateOneAsync(
+                    l => l.Id == log.Id, 
+                    Builders<PortScanLog>.Update
+                        .Set(l => l.Status , ScanStatus.Error)
+                        .Set(l => l.EndedAt, DateTime.UtcNow)
+                        .Set(l => l.Duration, stopwatch.Elapsed)
+                    ); 
+            throw;
+        }
     }
 
     private async Task<PortState> CheckPortStatus(string ip, int port)

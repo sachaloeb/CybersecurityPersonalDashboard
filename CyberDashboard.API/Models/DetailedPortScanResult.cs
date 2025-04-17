@@ -20,5 +20,6 @@ public class DetailedPortScanResult
     public bool IsHostUp { get; set; }
     public TimeSpan ScanDuration { get; set; }
     public List<PortStatusInfo> Ports { get; set; } = new();
+    public ScanStatus Status { get; set; } = ScanStatus.Complete;
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }

@@ -4,14 +4,15 @@ public class MongoLogService
 {
     private readonly IMongoDatabase _database;
     private readonly IMongoCollection<ThreatLog> _logCollection;
+    public IMongoCollection<PortScanLog> PortScanLogs;
 
     public MongoLogService(IConfiguration config)
     {
         var mongoConnection = config.GetConnectionString("MongoDB");
         var client = new MongoClient(mongoConnection);
-        var database = client.GetDatabase("CyberDashboardNoSQL");
-
-        _logCollection = database.GetCollection<ThreatLog>("ThreatLogs");
+        _database = client.GetDatabase("CyberDashboardNoSQL");
+        _logCollection     = _database.GetCollection<ThreatLog>("ThreatLogs");
+        PortScanLogs       = _database.GetCollection<PortScanLog>("PortScanLogs");
     }
 
     public async Task InsertLogAsync(ThreatLog log)
