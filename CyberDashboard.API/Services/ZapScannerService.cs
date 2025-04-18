@@ -48,9 +48,13 @@ public class ZapScannerService
         var response = await _httpClient.GetAsync(
             $"https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch={encodedKeyword}&resultsPerPage=5");
 
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"NVD API failed: {response.StatusCode}");
+            return new List<CveEntry>(); // Return empty gracefully
+        }
 
+        var json = await response.Content.ReadAsStringAsync();
         var root = JsonDocument.Parse(json);
         var result = new List<CveEntry>();
 
@@ -61,8 +65,8 @@ public class ZapScannerService
             {
                 Id = cve.GetProperty("id").GetString(),
                 Description = cve.GetProperty("descriptions")[0].GetProperty("value").GetString(),
-                Severity = cve.TryGetProperty("metrics", out var metrics) && 
-                           metrics.TryGetProperty("cvssMetricV31", out var cvssArray) && 
+                Severity = cve.TryGetProperty("metrics", out var metrics) &&
+                           metrics.TryGetProperty("cvssMetricV31", out var cvssArray) &&
                            cvssArray[0].TryGetProperty("cvssData", out var cvssData)
                     ? cvssData.GetProperty("baseSeverity").GetString()
                     : "Unknown",

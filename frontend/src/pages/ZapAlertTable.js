@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// ZapAlertTable.js - Refined with history logging, risk filtering, and expandable color-coded results
+import React, { useState, useEffect } from 'react';
 import './ZapAlertTable.css';
 
 const ZapAlertTable = () => {
@@ -7,6 +8,7 @@ const ZapAlertTable = () => {
     const [url, setUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState(null);
+    const [filter, setFilter] = useState('all');
 
     const getRiskClass = (risk) => {
         switch (risk.toLowerCase()) {
@@ -57,6 +59,10 @@ const ZapAlertTable = () => {
         setExpandedIndex(index === expandedIndex ? null : index);
     };
 
+    const filteredAlerts = filter === 'all'
+        ? alerts
+        : alerts.filter(a => a.risk.toLowerCase() === filter);
+
     return (
         <div className="zap-container">
             <h2 className="zap-title">Vulnerability Scanner</h2>
@@ -74,10 +80,19 @@ const ZapAlertTable = () => {
                 </button>
             </div>
 
-            {alerts.length > 0 && <h3 className="zap-results-title">Scan Results</h3>}
-            {alerts.length === 0 && !loading && <p className="zap-empty">No alerts to display.</p>}
+            <div className="zap-filter-group">
+                <label>Filter by risk:</label>
+                {['all', 'high', 'medium', 'low', 'informational'].map(level => (
+                    <button key={level} onClick={() => setFilter(level)} className={`zap-filter-btn ${filter === level ? 'active' : ''}`}>
+                        {level.charAt(0).toUpperCase() + level.slice(1)}
+                    </button>
+                ))}
+            </div>
 
-            {alerts.map((alert, index) => (
+            {filteredAlerts.length > 0 && <h3 className="zap-results-title">ZAP Scan Results</h3>}
+            {filteredAlerts.length === 0 && !loading && <p className="zap-empty">No alerts to display.</p>}
+
+            {filteredAlerts.map((alert, index) => (
                 <div key={index} className="zap-alert-card">
                     <div className="zap-alert-header" onClick={() => toggleExpand(index)}>
                         <span className="zap-alert-title">{alert.alert}</span>
@@ -90,21 +105,14 @@ const ZapAlertTable = () => {
                             <p><strong>Description:</strong> {alert.description}</p>
                             <p><strong>Solution:</strong> {alert.solution}</p>
                             {alert.reference && (
-                                <p>
-                                    <strong>Reference:</strong>{' '}
-                                    <a href={alert.reference.split('\n')[0]} target="_blank" rel="noopener noreferrer">
-                                        {alert.reference.split('\n')[0]}
-                                    </a>
-                                </p>
+                                <p><strong>Reference:</strong> <a href={alert.reference.split('\n')[0]} target="_blank" rel="noopener noreferrer">{alert.reference.split('\n')[0]}</a></p>
                             )}
                             {alert.tags && (
                                 <div className="zap-tags">
                                     <strong>Tags:</strong>
                                     <ul>
                                         {Object.entries(alert.tags).map(([key, value]) => (
-                                            <li key={key}>
-                                                <a href={value} target="_blank" rel="noopener noreferrer">{key}</a>
-                                            </li>
+                                            <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>
                                         ))}
                                     </ul>
                                 </div>
