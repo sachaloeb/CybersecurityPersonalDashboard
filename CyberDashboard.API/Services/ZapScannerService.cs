@@ -6,10 +6,50 @@ using System.Collections.Generic;
 public class ZapScannerService
 {
     private readonly HttpClient _httpClient;
+    private readonly MongoLogService _mongo;
 
-    public ZapScannerService(HttpClient httpClient)
+    public ZapScannerService(MongoLogService mongo,HttpClient httpClient)
     {
         _httpClient = httpClient;
+        _mongo = mongo;
+    }
+    
+    public async Task<List<ZapAlert>> GetAndLogAlertsAsync(string url)
+    {
+        // existing GetAlertsAsync() code …
+        var alerts = await GetAlertsAsync();
+
+        // ► store summary
+        var maxRisk = alerts
+            .Select(a => a.Risk.ToLower())
+            .OrderBy(r => r == "high"   ? 0 :
+                r == "medium" ? 1 :
+                r == "low"    ? 2 : 3)
+            .FirstOrDefault("informational");
+
+        await _mongo.InsertZapAsync(new ZapScanLog
+        {
+            Url       = url,
+            MaxRisk   = maxRisk,
+            AlertIds  = alerts.Select(a => a.Alert),
+            Timestamp = DateTime.UtcNow
+        });
+
+        return alerts;
+    }
+
+    public async Task<List<CveEntry>> GetAndLogCvesAsync(string url)
+    {
+        var cves = await GetCvesForKeywordAsync(url);
+
+        await _mongo.InsertCveAsync(new CveScanLog
+        {
+            Url        = url,
+            CveIds     = cves.Select(c => c.Id),
+            Timestamp  = DateTime.UtcNow
+        });
+
+        return cves;
     }
 
     public async Task<List<ZapAlert>> GetAlertsAsync()

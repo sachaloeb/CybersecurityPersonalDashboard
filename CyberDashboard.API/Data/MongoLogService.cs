@@ -5,6 +5,11 @@ public class MongoLogService
     private readonly IMongoDatabase _database;
     private readonly IMongoCollection<ThreatLog> _logCollection;
     public IMongoCollection<PortScanLog> PortScanLogs;
+    public IMongoCollection<ZapScanLog> ZapScanLogs   => _database.GetCollection<ZapScanLog>("ZapScanLogs");
+    public IMongoCollection<CveScanLog> CveScanLogs   => _database.GetCollection<CveScanLog>("CveScanLogs");
+
+    public Task InsertZapAsync(ZapScanLog log) => ZapScanLogs.InsertOneAsync(log);
+    public Task InsertCveAsync(CveScanLog log) => CveScanLogs.InsertOneAsync(log);
 
     public MongoLogService(IConfiguration config)
     {
