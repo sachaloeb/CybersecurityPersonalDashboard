@@ -83,7 +83,11 @@ const ZapAlertTable = () => {
             <div className="zap-filter-group">
                 <label>Filter by risk:</label>
                 {['all', 'high', 'medium', 'low', 'informational'].map(level => (
-                    <button key={level} onClick={() => setFilter(level)} className={`zap-filter-btn ${filter === level ? 'active' : ''}`}>
+                    <button
+                        key={level}
+                        onClick={() => setFilter(level)}
+                        className={`zap-filter-btn ${filter === level ? 'active' : ''}`}
+                    >
                         {level.charAt(0).toUpperCase() + level.slice(1)}
                     </button>
                 ))}
@@ -105,14 +109,17 @@ const ZapAlertTable = () => {
                             <p><strong>Description:</strong> {alert.description}</p>
                             <p><strong>Solution:</strong> {alert.solution}</p>
                             {alert.reference && (
-                                <p><strong>Reference:</strong> <a href={alert.reference.split('\n')[0]} target="_blank" rel="noopener noreferrer">{alert.reference.split('\n')[0]}</a></p>
+                                <p><strong>Reference:</strong> <a href={alert.reference.split('\n')[0]} target="_blank"
+                                                                  rel="noopener noreferrer">{alert.reference.split('\n')[0]}</a>
+                                </p>
                             )}
                             {alert.tags && (
                                 <div className="zap-tags">
                                     <strong>Tags:</strong>
                                     <ul>
                                         {Object.entries(alert.tags).map(([key, value]) => (
-                                            <li key={key}><a href={value} target="_blank" rel="noopener noreferrer">{key}</a></li>
+                                            <li key={key}><a href={value} target="_blank"
+                                                             rel="noopener noreferrer">{key}</a></li>
                                         ))}
                                     </ul>
                                 </div>
