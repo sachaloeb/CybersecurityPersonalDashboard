@@ -4,6 +4,7 @@ import axios from "axios";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import "jspdf-autotable";
 import "./ThreatSimulation.css";
 
@@ -70,19 +71,21 @@ const ThreatSimulation = () => {
         saveAs(blob, "threat_logs.csv");
     };
 
-    const exportPdf = () => {
-        const doc = new jsPDF();
-        doc.text("Threat Logs", 14, 16);
-        doc.autoTable({
-            head: [["Timestamp", "Target", "Attack", "Result"]],
-            body: logs.map((l) => [
-                new Date(l.timestamp).toLocaleString(),
-                l.target,
-                l.attackType,
-                l.result ? "✔" : "✘",
-            ]),
-        });
-        doc.save("threat_logs.pdf");
+    const exportPdf = (tableSelector = ".log-table") => {
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt" });
+
+        // grab the header & rows from the DOM
+        const head = [
+            [...document.querySelectorAll(`${tableSelector} thead th`)].map(
+                (th) => th.innerText
+            ),
+        ];
+        const body = [...document.querySelectorAll(`${tableSelector} tbody tr`)].map(
+            (tr) => [...tr.children].map((td) => td.innerText)
+        );
+
+        autoTable(doc, { head, body, startY: 40 });
+        doc.save("threat-logs.pdf");
     };
 
     useEffect(() => {
@@ -102,7 +105,7 @@ const ThreatSimulation = () => {
                     onChange={(e) => setAttackType(e.target.value)}
                 >
                     <option value="BRUTE_FORCE">Brute Force</option>
-                    <option value="XSS">Fake XSS</option>
+                    <option value="XSS">XSS</option>
                 </select>
 
                 <input
@@ -163,7 +166,7 @@ const ThreatSimulation = () => {
                 <button className="button" onClick={exportCsv}>
                     Export CSV
                 </button>{" "}
-                <button className="button" onClick={exportPdf}>
+                <button className="button" onClick={() => exportPdf()}>
                     Export PDF
                 </button>
                 <table className="log-table">
