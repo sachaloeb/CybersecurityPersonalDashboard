@@ -1,5 +1,5 @@
-public class XssRequest
+public record XssRequest
 {
-    public string TargetUrl { get; set; } = "";
-    public string Payload { get; set; } = "";
+    public string TargetUrl { get; init; } = "";
+    public string Payload   { get; init; } = "";
 }

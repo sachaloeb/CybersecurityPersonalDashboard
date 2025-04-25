@@ -34,7 +34,7 @@ builder.Services.AddScoped<IPortScannerService, PortScannerService>();
 builder.Services.AddHttpClient<ZapScannerService>();
 builder.Services.AddSingleton<ThreatLogService>();
 builder.Services.AddScoped<ThreatSimulationService>();
-builder.Services.AddScoped<SshBruteForceService>();
+//builder.Services.AddScoped<SshBruteForceService>();
 // 1) Add PostgreSQL for analytics / reports
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));

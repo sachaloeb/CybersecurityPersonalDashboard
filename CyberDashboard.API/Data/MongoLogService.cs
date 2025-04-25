@@ -20,7 +20,7 @@ public class MongoLogService
         PortScanLogs       = _database.GetCollection<PortScanLog>("PortScanLogs");
     }
 
-    public async Task InsertLogAsync(ThreatLog log)
+    public async Task InsertAsync(ThreatLog log)
     {
         await _logCollection.InsertOneAsync(log);
     }
@@ -37,4 +37,7 @@ public class MongoLogService
     {
         return _database.GetCollection<T>(name);
     }
+
+	public Task InsertManyAsync(IEnumerable<ThreatLog> logs) =>
+        _logCollection.InsertManyAsync(logs);
 }

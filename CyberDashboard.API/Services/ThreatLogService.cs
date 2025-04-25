@@ -1,5 +1,5 @@
 // Services/ThreatLogService.cs
-
+using Renci.SshNet;
 using MongoDB.Driver;
 
 public class ThreatLogService
@@ -36,8 +36,8 @@ public class ThreatLogService
             filter &= filterBuilder.Lte(l => l.Timestamp, endDate.Value);
 
         // Filter by attack type
-        if (!string.IsNullOrEmpty(attackType))
-            filter &= filterBuilder.Eq(l => l.AttackType, attackType);
+        if (!string.IsNullOrEmpty(attackType)) 
+            filter &= filterBuilder.Eq(nameof(ThreatLog.AttackType), attackType);  
 
         // Filter by IP
         if (!string.IsNullOrEmpty(ip))
